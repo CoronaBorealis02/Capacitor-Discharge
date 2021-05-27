@@ -70,7 +70,7 @@ while testcounter < TESTNO:
 	ax.yaxis.set_major_locator(plt.MaxNLocator(4))
 	ax.invert_yaxis()
 	ax.set(xlabel='Time (ms)', ylabel='Voltage (V)',
-       title='Capacitor Test ' + str(testcounter))
+	   title='Capacitor Test ' + str(testcounter))
 	fig.savefig(PATH + "/test" + str(testcounter) + ".png")
 	ser.close()
 workbook.close()
@@ -79,17 +79,27 @@ Time = []
 Voltage = []
 xlsx = pd.ExcelFile(PATH + '\capacitor.xlsx')
 fig, ax = plt.subplots(figsize=(21,12))
+fig2, ax2 = plt.subplots(figsize=(21,12))
 
 for i in range(1, (TESTNO + 1)):
-    df = pd.read_excel (xlsx, sheet_name=str(i))
-    Time = df['Time (ms)']
-    Voltage = df['Voltage (v)']
-    ax.plot(Time, Voltage, label=("Test " + str(i)))
-    print ("Completed " + str(i) + " of " + str(TESTNO))
-    
+	df = pd.read_excel (xlsx, sheet_name=str(i))
+	Time = df['Time (ms)']
+	Voltage = df['Voltage (v)']
+	ax2.plot(Time, Voltage, label=("Test " + str(i)))
+	ax.plot(Time, Voltage, label=("Test " + str(i)))
+	print ("Completed " + str(i) + " of " + str(TESTNO))
+	
 ax.xaxis.set_major_locator(plt.MaxNLocator(10))
 ax.yaxis.set_major_locator(plt.MaxNLocator(4))
 ax.legend(ncol=4)
 ax.set(xlabel='Time (ms)', ylabel='Voltage (V)',
-       title='Capacitor Test Overlapped (Tests 1 - ' + str(TESTNO) + ')')
+	   title='Capacitor Test Overlapped (Tests 1 - ' + str(TESTNO) + ')')
 fig.savefig(PATH + "/testOverlap.png")
+ax2.xaxis.set_major_locator(plt.MaxNLocator(10))
+ax2.yaxis.set_major_locator(plt.MaxNLocator(4))
+ax2.legend(ncol=4)
+plt.yscale('log')
+ax2.set(xlabel='Time (ms)', ylabel='Voltage (V)',
+	   title='Capacitor Test Overlapped (Tests 1 - ' + str(TESTNO) + ') (Log scale)')
+fig2.savefig(PATH + "/logoverlap.png")
+
